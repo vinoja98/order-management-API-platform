@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RequestResponse {
 
-    @JsonProperty("access_token")
+    @JsonProperty("auth_token")
     private String token;
 
     @JsonProperty("token_type")

@@ -1,9 +1,15 @@
 package com.management.orders.components;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SignUpRequest {
+    @JsonProperty("email")
     private String email;
+    @JsonProperty("password")
     private String password;
+    @JsonProperty("firstName")
     private String firstName;
+    @JsonProperty("lastName")
     private String lastName;
 
     public String getEmail() {

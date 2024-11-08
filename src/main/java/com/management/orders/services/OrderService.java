@@ -29,13 +29,13 @@ public class OrderService {
         this.userCache = new ConcurrentHashMap<>();
     }
 
-    public Order createOrder(OrderRequest request) {
-        User user = userCache.computeIfAbsent(request.getUserId(), id -> new User(id, request.getUserEmail()));
-        String referenceNumber = generateOrderReferenceNumber();
-        Order order = new Order(referenceNumber, user, request.getItemName(), request.getQuantity(), request.getShippingAddress());
-        orderCache.put(referenceNumber, order);
-        return order;
-    }
+//    public Order createOrder(OrderRequest request) {
+//        User user = userCache.computeIfAbsent(request.getUserId(), id -> new User(id, request.getUserEmail()));
+//        String referenceNumber = generateOrderReferenceNumber();
+//        Order order = new Order(referenceNumber, user, request.getItemName(), request.getQuantity(), request.getShippingAddress());
+//        orderCache.put(referenceNumber, order);
+//        return order;
+//    }
 
     public Order cancelOrder(String referenceNumber) {
         Order order = orderCache.getIfPresent(referenceNumber);
