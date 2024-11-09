@@ -15,7 +15,7 @@ public class OrdersApplication {
 	}
 
 	@EventListener
-	public void onApplicationReadyEvent(ApplicationReadyEvent event) {
+	public void onApplicationReadyEvent() {
 		System.out.println("************************");
 		System.out.println("*** Order API Ready ***");
 		System.out.println("************************");

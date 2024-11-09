@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,9 +85,7 @@ public class OrderService {
         System.out.println("Dispatch Started");
         orderCacheService.getOrders()
                 .filter(order -> order.getStatus() == OrderStatus.NEW)
-                .forEach(order -> {
-                    order.setStatus(OrderStatus.DISPATCHED);
-                });
+                .forEach(order -> order.setStatus(OrderStatus.DISPATCHED));
     }
 
     private String generateOrderReferenceNumber() {
