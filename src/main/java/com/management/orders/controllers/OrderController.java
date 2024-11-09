@@ -108,6 +108,11 @@ public class OrderController {
             // If emails match, proceed with order creation
             return ResponseEntity.ok(orderService.cancelOrder(email,reference));
 
+        }
+        catch (IllegalStateException | IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)

@@ -39,8 +39,12 @@ public class OrderService {
                 .filter(order -> order.getReferenceNumber().equals(referenceNumber))
                 .findFirst()
                 .map(order -> {
-                    order.setStatus(OrderStatus.CANCELLED);
-                    return order;
+                    if (order.getStatus() == OrderStatus.NEW) {
+                        order.setStatus(OrderStatus.CANCELLED);
+                        return order;
+                    } else {
+                        throw new IllegalStateException("Order cannot be canceled as it is not in NEW status");
+                    }
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or reference number"));
     }
