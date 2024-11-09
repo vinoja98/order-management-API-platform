@@ -20,7 +20,7 @@ public class AuthService {
     public User signUp(SignUpRequest request) {
         // Validate if user already exists
         if (userCacheService.exists(request.getEmail())) {
-            throw new IllegalArgumentException("User already exists with email: " + request.getEmail());
+            throw new IllegalArgumentException("User Creation Exception");
         }
         User user = new User(
                 request.getEmail(),
