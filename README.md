@@ -22,6 +22,27 @@ CREATE TABLE `Order` (
     FOREIGN KEY (email) REFERENCES User(email)
 );
 ```
+## Client Sign Up
+
+When a client is registered,BCryptPasswordEncoder instance, 
+which is a specific implementation of PasswordEncoder 
+that uses the BCrypt hashing function is used to encrypt the
+password.
+
+![](signup.png)
+
+## Client Sign In
+![](signin.png)
+
+## Order placement
+![](create.png)
+
+## Order cancellation
+![](cancel.png)
+
+## Fetch order history with Pagination
+![](history.png)
+
 ## Dockerize the Application
 ```
 docker build -t order-management-api .
