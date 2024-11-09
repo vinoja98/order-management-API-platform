@@ -50,15 +50,38 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or reference number"));
     }
 
-    public List<Order> getOrderHistory(String email,int page, int size) {
+    public List<Order> getOrderHistory(String email, int page, int size) {
         return orderCacheService.getOrders(email)
+                .sorted((o1, o2) -> {
+                    try {
+                        String ref1 = o1.getReferenceNumber();
+                        String ref2 = o2.getReferenceNumber();
+
+                        // Extract numbers from references
+                        int num1 = extractNumber(ref1);
+                        int num2 = extractNumber(ref2);
+
+                        return Integer.compare(num2, num1);
+                    } catch (Exception e) {
+                        // Fall back to string comparison if parsing fails
+                        return o2.getReferenceNumber().compareTo(o1.getReferenceNumber());
+                    }
+                })
                 .skip((long) (page-1) * size)
                 .limit(size)
                 .collect(Collectors.toList());
     }
 
-    @Scheduled(cron = "0 0 * * * *")
-//    @Scheduled(cron = "0 */2 * * * *")
+    private int extractNumber(String reference) {
+        try {
+            return Integer.parseInt(reference.substring(reference.indexOf("-") + 1));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+//    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 */2 * * * *")
     public void dispatchPendingOrders() {
         System.out.println("Dispatch Started");
         orderCacheService.getOrders()

@@ -66,7 +66,7 @@ public class OrderController {
             if (!jwtService.validateToken(token)) {
                 return ResponseEntity
                         .status(HttpStatus.FORBIDDEN)
-                        .body("You are not authorized to create an order for this email");
+                        .body("Not authorized");
             }
 
             // Get email from token
