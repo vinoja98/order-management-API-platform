@@ -32,6 +32,9 @@ password.
 ![](signup.png)
 
 ## Client Sign In
+
+When a user is logged in, an auth token is generated. Auth token
+should be used in the auth header of the order endpoints.
 ![](signin.png)
 
 ## Order placement
