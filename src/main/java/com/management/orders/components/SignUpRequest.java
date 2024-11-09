@@ -1,14 +1,19 @@
 package com.management.orders.components;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 
 public class SignUpRequest {
+    @NotNull
     @JsonProperty("email")
     private String email;
+    @NotNull
     @JsonProperty("password")
     private String password;
+    @NotNull
     @JsonProperty("firstName")
     private String firstName;
+    @NotNull
     @JsonProperty("lastName")
     private String lastName;
 

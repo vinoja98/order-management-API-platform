@@ -1,11 +1,17 @@
 package com.management.orders.components;
 
 
+import jakarta.validation.constraints.NotNull;
+
 public class User {
 
+    @NotNull
     private String email;
+    @NotNull
     private String password;
+    @NotNull
     private String firstName;
+    @NotNull
     private String lastName;
 
 

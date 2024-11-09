@@ -33,6 +33,13 @@ public class GlobalExceptionHandler {
                 .body(createErrorResponse(ex.getMessage()));
     }
 
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<?> handleIllegalArgumentException(NullPointerException ex, WebRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(createErrorResponse(ex.getMessage()));
+    }
+
     private Map<String, String> createErrorResponse(String message) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", message);
