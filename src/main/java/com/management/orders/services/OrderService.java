@@ -34,14 +34,16 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
     }
 
-//    public Order cancelOrder(String referenceNumber) {
-//        Order order = orderCacheService.getIfPresent(referenceNumber);
-//        if (order != null && order.getStatus() == OrderStatus.NEW) {
-//            order.setStatus(OrderStatus.CANCELLED);
-//            orderCache.put(referenceNumber, order);
-//        }
-//        return order;
-//    }
+    public Order cancelOrder(String email,String referenceNumber) {
+        return orderCacheService.getOrders(email)
+                .filter(order -> order.getReferenceNumber().equals(referenceNumber))
+                .findFirst()
+                .map(order -> {
+                    order.setStatus(OrderStatus.CANCELLED);
+                    return order;
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or reference number"));
+    }
 
     public List<Order> getOrderHistory(String email,int page, int size) {
         return orderCacheService.getOrders(email)

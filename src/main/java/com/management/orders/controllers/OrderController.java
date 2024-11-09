@@ -85,4 +85,33 @@ public class OrderController {
                     .body("Invalid or expired token");
         }
     }
+
+    @PutMapping("cancel")
+    public ResponseEntity<?> cancelOrder(
+            @RequestParam String email, @RequestParam String reference,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        // Extract token from Authorization header
+        String token = authHeader.replace("Bearer ", "");
+
+        try {
+            // Get email from token
+            String emailFromToken = jwtService.getEmailFromToken(token);
+
+            // Validate emails match
+            if (!emailFromToken.equals(email)) {
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body("You are not authorized to create an order for this email");
+            }
+
+            // If emails match, proceed with order creation
+            return ResponseEntity.ok(orderService.cancelOrder(email,reference));
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid or expired token");
+        }
+    }
 }
