@@ -1,19 +1,16 @@
 package com.management.orders.components;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class OrderRequest {
-    private Long userId;
+    @JsonProperty("email")
     private String userEmail;
+    @JsonProperty("itemName")
     private String itemName;
+    @JsonProperty("quantity")
     private Integer quantity;
+    @JsonProperty("shippingAddress")
     private String shippingAddress;
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     public String getUserEmail() {
         return userEmail;

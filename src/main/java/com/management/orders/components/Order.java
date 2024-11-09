@@ -1,16 +1,26 @@
 package com.management.orders.components;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Order {
+    @JsonProperty("referenceNumber")
     private String referenceNumber;
-    private User user;
+    @JsonProperty("email")
+    private String userEmail;
+
+    @JsonProperty("itemName")
     private String itemName;
+
+    @JsonProperty("quantity")
     private Integer quantity;
+
+    @JsonProperty("shippingAddress")
     private String shippingAddress;
     private OrderStatus status = OrderStatus.NEW;
 
-    public Order(String referenceNumber, User user, String itemName, Integer quantity, String shippingAddress) {
+    public Order(String referenceNumber, String userEmail, String itemName, Integer quantity, String shippingAddress) {
         this.referenceNumber = referenceNumber;
-        this.user = user;
+        this.userEmail = userEmail;
         this.itemName = itemName;
         this.quantity = quantity;
         this.shippingAddress = shippingAddress;
@@ -24,12 +34,12 @@ public class Order {
         this.referenceNumber = referenceNumber;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getItemName() {

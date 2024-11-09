@@ -3,10 +3,8 @@ package com.management.orders.services;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.management.orders.components.Order;
-import com.management.orders.components.OrderRequest;
-import com.management.orders.components.OrderStatus;
-import com.management.orders.components.User;
+import com.management.orders.components.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,23 +17,31 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
     private final Cache<String, Order> orderCache;
-    private final Map<Long, User> userCache;
     private long orderReferenceCounter = 1;
+    @Autowired
+    UserCacheService userCacheService;
 
     public OrderService() {
         this.orderCache = CacheBuilder.newBuilder()
                 .expireAfterAccess(1, TimeUnit.HOURS)
                 .build();
-        this.userCache = new ConcurrentHashMap<>();
     }
 
-//    public Order createOrder(OrderRequest request) {
-//        User user = userCache.computeIfAbsent(request.getUserId(), id -> new User(id, request.getUserEmail()));
-//        String referenceNumber = generateOrderReferenceNumber();
-//        Order order = new Order(referenceNumber, user, request.getItemName(), request.getQuantity(), request.getShippingAddress());
-//        orderCache.put(referenceNumber, order);
-//        return order;
-//    }
+    public Order createOrder(OrderRequest request) {
+        return userCacheService.getUser(request.getUserEmail())
+                .map(user -> {
+                    String referenceNumber = generateOrderReferenceNumber();
+                    Order order = new Order(
+                            referenceNumber,
+                            user.getEmail(),
+                            request.getItemName(),
+                            request.getQuantity(),
+                            request.getShippingAddress());
+                    orderCache.put(referenceNumber, order);
+                    return order;
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+    }
 
     public Order cancelOrder(String referenceNumber) {
         Order order = orderCache.getIfPresent(referenceNumber);

@@ -1,36 +1,45 @@
 package com.management.orders.services;
 
-import com.management.orders.components.RequestResponse;
+import com.management.orders.components.LoginResponse;
 import com.management.orders.components.SignInRequest;
 import com.management.orders.components.SignUpRequest;
 import com.management.orders.components.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class AuthService {
     @Autowired
     public JwtService jwtService;
-    private final Map<String, User> userCache = new ConcurrentHashMap<>();
+    @Autowired
+    UserCacheService userCacheService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User signUp(SignUpRequest request) {
-        User user = new User(request.getEmail(), request.getPassword(), request.getFirstName(), request.getLastName());
-        userCache.put(request.getEmail(), user);
+        // Validate if user already exists
+        if (userCacheService.exists(request.getEmail())) {
+            throw new IllegalArgumentException("User already exists with email: " + request.getEmail());
+        }
+        User user = new User(
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getFirstName(),
+                request.getLastName());
+        userCacheService.addUser(user);
         return user;
     }
 
-    public RequestResponse signIn(SignInRequest request) {
-        User user = userCache.get(request.getEmail());
-        if (user != null && user.getPassword().equals(request.getPassword())) {
-            String loginName = user.getEmail();
-            String tokenParams = this.jwtService.generateToken(loginName);
-            RequestResponse requestResponse = new RequestResponse();
-            requestResponse.setToken(tokenParams);
-            return requestResponse;
-        }
-        return null;
+    public LoginResponse signIn(SignInRequest request) {
+        return userCacheService.getUser(request.getEmail())
+                .filter(user -> passwordEncoder.matches(request.getPassword(), user.getPassword()))
+                .map(user -> {
+                    String token = jwtService.generateToken(user.getEmail());
+                    LoginResponse response = new LoginResponse();
+                    response.setToken(token);
+                    return response;
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
     }
 }
