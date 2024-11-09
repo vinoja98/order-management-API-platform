@@ -19,13 +19,13 @@ public class OrderService {
     OrderCacheService orderCacheService;
 
 
-    public Order createOrder(OrderRequest request) {
-        return userCacheService.getUser(request.getUserEmail())
+    public Order createOrder(OrderRequest request,String email) {
+        return userCacheService.getUser(email)
                 .map(user -> {
                     String referenceNumber = generateOrderReferenceNumber();
                     Order order = new Order(
                             referenceNumber,
-                            user.getEmail(),
+                            email,
                             request.getItemName(),
                             request.getQuantity(),
                             request.getShippingAddress());

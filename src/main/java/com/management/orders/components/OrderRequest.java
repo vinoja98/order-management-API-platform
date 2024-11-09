@@ -3,22 +3,12 @@ package com.management.orders.components;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class OrderRequest {
-    @JsonProperty("email")
-    private String userEmail;
     @JsonProperty("itemName")
     private String itemName;
     @JsonProperty("quantity")
     private Integer quantity;
     @JsonProperty("shippingAddress")
     private String shippingAddress;
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
 
     public String getItemName() {
         return itemName;

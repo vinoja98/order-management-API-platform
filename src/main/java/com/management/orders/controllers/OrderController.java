@@ -29,21 +29,16 @@ public class OrderController {
         String token = authHeader.replace("Bearer ", "");
 
         try {
-            // Get email from token
-            String emailFromToken = jwtService.getEmailFromToken(token);
-
-            // Get email from request
-            String emailFromRequest = orderRequest.getUserEmail();
-
-            // Validate emails match
-            if (!emailFromToken.equals(emailFromRequest)) {
+            // Validate token
+            if (!jwtService.validateToken(token)) {
                 return ResponseEntity
                         .status(HttpStatus.FORBIDDEN)
                         .body("You are not authorized to create an order for this email");
             }
 
-            // If emails match, proceed with order creation
-            return ResponseEntity.ok(orderService.createOrder(orderRequest));
+            // Get email from token
+            String emailFromToken = jwtService.getEmailFromToken(token);
+            return ResponseEntity.ok(orderService.createOrder(orderRequest,emailFromToken));
 
         } catch (Exception e) {
             return ResponseEntity
@@ -54,8 +49,9 @@ public class OrderController {
 
 
     @GetMapping("list")
-    public ResponseEntity<?> getOrders( @RequestParam String email, @RequestParam int page,
-                                        @RequestParam int size, @RequestHeader("Authorization") String authHeader
+    public ResponseEntity<?> getOrders( @RequestParam int page,
+                                        @RequestParam int size,
+                                        @RequestHeader("Authorization") String authHeader
     ) {
         if(page<1 || size<1){
             return ResponseEntity
@@ -66,18 +62,16 @@ public class OrderController {
         String token = authHeader.replace("Bearer ", "");
 
         try {
-            // Get email from token
-            String emailFromToken = jwtService.getEmailFromToken(token);
-
-            // Validate emails match
-            if (!emailFromToken.equals(email)) {
+            // Validate token
+            if (!jwtService.validateToken(token)) {
                 return ResponseEntity
                         .status(HttpStatus.FORBIDDEN)
                         .body("You are not authorized to create an order for this email");
             }
 
-            // If emails match, proceed with order listing
-            return ResponseEntity.ok(orderService.getOrderHistory(email,page,size));
+            // Get email from token
+            String emailFromToken = jwtService.getEmailFromToken(token);
+            return ResponseEntity.ok(orderService.getOrderHistory(emailFromToken,page,size));
 
         } catch (Exception e) {
             return ResponseEntity
@@ -88,25 +82,22 @@ public class OrderController {
 
     @PutMapping("cancel")
     public ResponseEntity<?> cancelOrder(
-            @RequestParam String email, @RequestParam String reference,
+            @RequestParam String reference,
             @RequestHeader("Authorization") String authHeader
     ) {
         // Extract token from Authorization header
         String token = authHeader.replace("Bearer ", "");
 
         try {
-            // Get email from token
-            String emailFromToken = jwtService.getEmailFromToken(token);
-
-            // Validate emails match
-            if (!emailFromToken.equals(email)) {
+            // Validate token
+            if (!jwtService.validateToken(token)) {
                 return ResponseEntity
                         .status(HttpStatus.FORBIDDEN)
                         .body("You are not authorized to create an order for this email");
             }
-
-            // If emails match, proceed with order creation
-            return ResponseEntity.ok(orderService.cancelOrder(email,reference));
+            // Get email from token
+            String emailFromToken = jwtService.getEmailFromToken(token);
+            return ResponseEntity.ok(orderService.cancelOrder(emailFromToken,reference));
 
         }
         catch (IllegalStateException | IllegalArgumentException e) {
