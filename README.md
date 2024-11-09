@@ -23,6 +23,8 @@ CREATE TABLE `Order` (
     FOREIGN KEY (email) REFERENCES User(email)
 );
 ```
+ER Diagram
+![](er.png)
 ## Client Sign Up
 
 When a client is registered,BCryptPasswordEncoder instance, 
