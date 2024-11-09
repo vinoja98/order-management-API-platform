@@ -19,6 +19,7 @@ CREATE TABLE `Order` (
     quantity INT NOT NULL,
     shipping_address TEXT NOT NULL,
     status ENUM('NEW', 'DISPATCHED', 'CANCELLED') DEFAULT 'NEW',
+    placement_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (email) REFERENCES User(email)
 );
 ```
