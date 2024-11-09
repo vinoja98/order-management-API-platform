@@ -1,10 +1,12 @@
 package com.management.orders.components;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDateTime;
 
 public class Order {
     @JsonProperty("referenceNumber")
     private String referenceNumber;
+
     @JsonProperty("email")
     private String userEmail;
 
@@ -16,7 +18,11 @@ public class Order {
 
     @JsonProperty("shippingAddress")
     private String shippingAddress;
+
     private OrderStatus status = OrderStatus.NEW;
+
+    @JsonProperty("placementTimestamp")
+    private LocalDateTime placementTimestamp;
 
     public Order(String referenceNumber, String userEmail, String itemName, Integer quantity, String shippingAddress) {
         this.referenceNumber = referenceNumber;
@@ -24,6 +30,7 @@ public class Order {
         this.itemName = itemName;
         this.quantity = quantity;
         this.shippingAddress = shippingAddress;
+        this.placementTimestamp = LocalDateTime.now(); // Set timestamp during creation
     }
 
     public String getReferenceNumber() {
@@ -72,5 +79,13 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public LocalDateTime getPlacementTimestamp() {
+        return placementTimestamp;
+    }
+
+    public void setPlacementTimestamp(LocalDateTime placementTimestamp) {
+        this.placementTimestamp = placementTimestamp;
     }
 }
