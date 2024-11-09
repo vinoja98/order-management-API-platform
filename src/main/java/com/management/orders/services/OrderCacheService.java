@@ -29,6 +29,10 @@ public class OrderCacheService {
         return orderCache.asMap().values().stream().filter(order -> order.getUserEmail().equals(email));
     }
 
+    public Stream<Order> getOrders() {
+        return orderCache.asMap().values().stream();
+    }
+
     public Optional<Order> getOrder(String referenceNumber) {
         return Optional.ofNullable(orderCache.getIfPresent(referenceNumber));
     }

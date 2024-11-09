@@ -2,6 +2,7 @@ package com.management.orders.services;
 
 import com.management.orders.components.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -56,14 +57,16 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-//    public void dispatchPendingOrders() {
-//        orderCache.asMap().values().stream()
-//                .filter(order -> order.getStatus() == OrderStatus.NEW)
-//                .forEach(order -> {
-//                    order.setStatus(OrderStatus.DISPATCHED);
-//                    orderCache.put(order.getReferenceNumber(), order);
-//                });
-//    }
+    @Scheduled(cron = "0 0 * * * *")
+//    @Scheduled(cron = "0 */2 * * * *")
+    public void dispatchPendingOrders() {
+        System.out.println("Dispatch Started");
+        orderCacheService.getOrders()
+                .filter(order -> order.getStatus() == OrderStatus.NEW)
+                .forEach(order -> {
+                    order.setStatus(OrderStatus.DISPATCHED);
+                });
+    }
 
     private String generateOrderReferenceNumber() {
         return "ORD-" + orderReferenceCounter++;
