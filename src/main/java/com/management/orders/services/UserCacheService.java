@@ -9,11 +9,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 
 @Service
-@Scope(value = "singleton", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserCacheService {
     private final Cache<String, User> userCache;
 
