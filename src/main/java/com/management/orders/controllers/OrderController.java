@@ -51,4 +51,38 @@ public class OrderController {
                     .body("Invalid or expired token");
         }
     }
+
+
+    @GetMapping("list")
+    public ResponseEntity<?> getOrders( @RequestParam String email, @RequestParam int page,
+                                        @RequestParam int size, @RequestHeader("Authorization") String authHeader
+    ) {
+        if(page<1 || size<1){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid page/size");
+        }
+        // Extract token from Authorization header
+        String token = authHeader.replace("Bearer ", "");
+
+        try {
+            // Get email from token
+            String emailFromToken = jwtService.getEmailFromToken(token);
+
+            // Validate emails match
+            if (!emailFromToken.equals(email)) {
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body("You are not authorized to create an order for this email");
+            }
+
+            // If emails match, proceed with order listing
+            return ResponseEntity.ok(orderService.getOrderHistory(email,page,size));
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid or expired token");
+        }
+    }
 }

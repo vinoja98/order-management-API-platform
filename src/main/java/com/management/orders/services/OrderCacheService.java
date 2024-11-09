@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 @Service
 public class OrderCacheService {
@@ -22,6 +23,10 @@ public class OrderCacheService {
         if (order != null && order.getReferenceNumber() != null) {
             orderCache.put(order.getReferenceNumber(), order);
         }
+    }
+
+    public Stream<Order> getOrders(String email) {
+        return orderCache.asMap().values().stream().filter(order -> order.getUserEmail().equals(email));
     }
 
     public Optional<Order> getOrder(String referenceNumber) {
