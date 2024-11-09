@@ -15,7 +15,7 @@ public class OrderCacheService {
 
     public OrderCacheService() {
         this.orderCache = CacheBuilder.newBuilder()
-                .expireAfterAccess(1, TimeUnit.HOURS)
+                .expireAfterAccess(2, TimeUnit.HOURS)
                 .build();
     }
 

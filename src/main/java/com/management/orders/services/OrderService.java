@@ -79,8 +79,8 @@ public class OrderService {
         }
     }
 
-//    @Scheduled(cron = "0 0 * * * *")
-    @Scheduled(cron = "0 */2 * * * *")
+    @Scheduled(cron = "0 0 * * * *")
+//    @Scheduled(cron = "0 */2 * * * *")
     public void dispatchPendingOrders() {
         System.out.println("Dispatch Started");
         orderCacheService.getOrders()
