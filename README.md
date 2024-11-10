@@ -50,6 +50,11 @@ should be used in the auth header of the order endpoints.
 ![](history.png)
 
 ## Dockerize the Application
+ - Package the application to create the JAR file
+ - Then, navigate to the location where the Dockerfile 
+is located and run the following commands
+   (in Docker Desktop) to build the Docker image 
+and run the container
 ```
 docker build -t order-management-api .
 docker run -p 8000:8000 order-management-api
